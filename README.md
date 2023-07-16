@@ -29,15 +29,17 @@ While you're on it and if you don't use PawnPlus yet,
 
 ## Usage
 
-This include provides one single function
+This include provides ~~one single~~ **THREE** function
 ```pawn
-ShowPlayerAsyncDialog(playerid, style, const caption[], const info[], const button1[], const button2[])
+DialogAsync_ShowPlayer(playerid, DIALOG_STYLE:style, const string:caption[], const string:info[], const string:btnYes[], const string:btnNo[]);
+DialogAsync_ShowPlayer_s(playerid, DIALOG_STYLE:style, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[]);
+Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[]);
 ```
 
-This will show the dialog and await for the response, which will pause the
+This will show the dialog and await for the response (except for the `Dialog_ShowInfo`), which will pause the
 current script's execution and return the yielded value to the last public
 function (or 0 if it wasn't set). When it's responded to, the response details
-will be inside the `dialog_response[e_DIALOG_RESPONSE_INFO]` array. If another
+will be inside the `dialog_response[e_DIALOG_RESPONSES]` array. If another
 dialog gets shown while awaiting, the Task will be discarded with any following
 code that was to be resumed.
 
@@ -47,14 +49,14 @@ CMD:asyncdialog(playerid, params[])
 {
 	task_yield(1);
 
-	new dialog_response[DIALOG_RESPONSES];
+	new dialog_response[e_DIALOG_RESPONSES];
 	await_arr(dialog_response) DialogAsync_ShowPlayer(playerid, DIALOG_STYLE_LIST, "Example dialog", "This is listitem 0\nAnd this is one\nShow example nested dialog", "ok", "no");
 
-	if(dialog_response[E_DIALOG_RESPONSE_Response])
+	if(dialog_response[Response])
 	{
 		if(dialog_response[Listitem] == 2)
 		{
-			new other_dialog_response[DIALOG_RESPONSES];
+			new other_dialog_response[e_DIALOG_RESPONSES];
 			await_arr(other_dialog_response) DialogAsync_ShowPlayer(playerid, DIALOG_STYLE_MSGBOX, "Example nested dialog", "You will recieve a message\nwhichever your response is", "OK", "Yes");
 
 			SendClientMessage(playerid, COLOR_WHITE, "You responded something to the example dialog");
