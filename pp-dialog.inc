@@ -131,10 +131,10 @@ public AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:
 
 	if(dialogid == PPD_MAIN_DIALOG_ID)
 	{
-		new dialog_response[e_DIALOG_RESPONSE_INFO];
-		dialog_response[E_DIALOG_RESPONSE_Response] = response;
-		dialog_response[E_DIALOG_RESPONSE_Listitem] = listitem;
-		strcat(dialog_response[E_DIALOG_RESPONSE_InputText], inputtext, 129);
+		new dialog_response[DIALOG_RESPONSES];
+		dialog_response[Response] = response;
+		dialog_response[Listitem] = listitem;
+		strcat(dialog_response[InputText], inputtext, 129);
 
 		new const Task:task = PlayerDialogTasks[playerid];
 		PlayerDialogTasks[playerid] = Task:0;
