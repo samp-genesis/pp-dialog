@@ -33,6 +33,13 @@ public _pp@on_init@PPAsyncDialogs()
 {
 	// I wish I didn't had to do this, but rewriting the public function header is cool!!1
 	wait_ticks(1);
+
+	// Make sure to check if the dialogresponse exists
+	if (funcidx("OnDialogResponse") == -1)
+	{
+		pawn_create_callback("OnDialogResponse", expr_false());
+	}
+
 	AsyncDialogResponseHandler = pawn_register_callback("OnDialogResponse", "AsyncDialogsHandler");
 }
 
