@@ -9,19 +9,48 @@
 
 #include <PawnPlus>
 
-#if !defined PAWN_PLUS_DIALOG_ID
-	const PAWN_PLUS_DIALOG_ID = 0x502B; // "P+" in ascii hex
+#if !defined PPD_MAIN_DIALOG_ID
+	const PPD_MAIN_DIALOG_ID = 0x502B; // "P+" in ascii hex
 #endif
 
-#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-	native ShowPlayerDialogStr(playerid, dialogid, style, ConstAmxString:caption, ConstAmxString:info, ConstAmxString:button1, ConstAmxString:button2) = ShowPlayerDialog;
+#if !defined PPD_INFO_DIALOG_ID
+	const PPD_INFO_DIALOG_ID = 0x502C;
+#endif
+
+// We do a little bit trolling
+#if !defined DIALOG_STYLE
+	#undef DIALOG_STYLE_MSGBOX
+	#undef DIALOG_STYLE_INPUT
+	#undef DIALOG_STYLE_PASSWORD
+	#undef DIALOG_STYLE_LIST
+	#undef DIALOG_STYLE_TABLIST
+	#undef DIALOG_STYLE_TABLIST_HEADERS
+
+	enum DIALOG_STYLE {
+		DIALOG_STYLE_MSGBOX,
+		DIALOG_STYLE_INPUT,
+		DIALOG_STYLE_LIST,
+		DIALOG_STYLE_PASSWORD,
+		DIALOG_STYLE_TABLIST,
+		DIALOG_STYLE_TABLIST_HEADERS,
+	};
+
+	// NOTE: Since we actually do trolling, it's actually **RECOMMENDED** to place it on top of everything (after a_samp)
+	// since we don't know which one is still using ShowPlayerDialog
+
+	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
+		native ShowPlayerDialogStr(playerid, dialogid, DIALOG_STYLE:style, ConstAmxString:caption, ConstAmxString:info, ConstAmxString:button1, ConstAmxString:button2) = ShowPlayerDialog;
+	#endif
+
+	native DialogPlayerShow(playerid, dialogid, DIALOG_STYLE:style, const string:caption[], const string:info[], const string:button1[], const string:button2[]) = ShowPlayerDialog;
+	#define ShowPlayerDialog DialogPlayerShow
 #endif
 
 enum e_DIALOG_RESPONSE_INFO
 {
-	E_DIALOG_RESPONSE_Response,
-	E_DIALOG_RESPONSE_Listitem,
-	E_DIALOG_RESPONSE_InputText[128 + 1],
+	DIALOG_RESPONSE,
+	DIALOG_LISTITEM,
+	DIALOG_INPUTTEXT[128 + 1],
 }
 
 static Task:PlayerDialogTasks[MAX_PLAYERS] = {Task:0, ...};
@@ -49,50 +78,12 @@ public _pp@on_exit@PPAsyncDialogs()
 	pawn_unregister_callback(AsyncDialogResponseHandler);
 }
 
-#pragma deprecated Use ShowPlayerAsyncDialog instead
-stock AwaitAsyncDialog(playerid, dialog_response[e_DIALOG_RESPONSE_INFO], style, const caption[], const info[], const button1[], const button2[])
+stock Task:DialogAsync_ShowPlayer(playerid, DIALOG_STYLE:style, const caption[], const info[], const btnYes[], const btnNo[])
 {
 	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-		ShowPlayerDialogStr(playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
+		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, btnYes, btnNo);
 	#else
-		pawn_call_native("ShowPlayerDialog", "dddssss", playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
-	#endif
-
-	if(PlayerDialogTasks[playerid])
-	{
-		task_delete(PlayerDialogTasks[playerid]);
-	}
-	new const Task:dialog_task = PlayerDialogTasks[playerid] = task_new();
-	task_await(dialog_task);
-
-	task_get_result_arr(dialog_task, dialog_response);
-}
-
-#pragma deprecated Use ShowPlayerAsyncDialogStr instead
-stock AwaitAsyncDialogStr(playerid, dialog_response[e_DIALOG_RESPONSE_INFO], style, ConstStringTag:caption, ConstStringTag:info, ConstStringTag:button1, ConstStringTag:button2)
-{
-	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-		ShowPlayerDialogStr(playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
-	#else
-		pawn_call_native("ShowPlayerDialog", "dddSSSS", playerid, PAWN_PLUS_DIALOG_ID, style, _:caption, _:info, _:button1, _:button2);
-	#endif
-
-	if(PlayerDialogTasks[playerid])
-	{
-		task_delete(PlayerDialogTasks[playerid]);
-	}
-	new const Task:dialog_task = PlayerDialogTasks[playerid] = task_new();
-	task_await(dialog_task);
-
-	task_get_result_arr(dialog_task, dialog_response);
-}
-
-stock Task:ShowPlayerAsyncDialog(playerid, style, const caption[], const info[], const button1[], const button2[])
-{
-	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-		ShowPlayerDialogStr(playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
-	#else
-		pawn_call_native("ShowPlayerDialog", "dddssss", playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
+		pawn_call_native("ShowPlayerDialog", "dddssss", playerid, PPD_MAIN_DIALOG_ID, style, caption, info, btnYes, btnNo);
 	#endif
 
 	if(PlayerDialogTasks[playerid])
@@ -102,12 +93,12 @@ stock Task:ShowPlayerAsyncDialog(playerid, style, const caption[], const info[],
 	return PlayerDialogTasks[playerid] = task_new();
 }
 
-stock Task:ShowPlayerAsyncDialogStr(playerid, style, ConstStringTag:caption, ConstStringTag:info, ConstStringTag:button1, ConstStringTag:button2)
+stock Task:DialogAsync_ShowPlayer_s(playerid, DIALOG_STYLE:style, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[])
 {
 	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-		ShowPlayerDialogStr(playerid, PAWN_PLUS_DIALOG_ID, style, caption, info, button1, button2);
+		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, button1, button2);
 	#else
-		pawn_call_native("ShowPlayerDialog", "dddSSSS", playerid, PAWN_PLUS_DIALOG_ID, style, _:caption, _:info, _:button1, _:button2);
+		pawn_call_native("ShowPlayerDialog", "dddSSss", playerid, PPD_MAIN_DIALOG_ID, style, _:caption, _:info, btnYes, btnNo);
 	#endif
 
 	if(PlayerDialogTasks[playerid])
@@ -115,12 +106,30 @@ stock Task:ShowPlayerAsyncDialogStr(playerid, style, ConstStringTag:caption, Con
 		task_delete(PlayerDialogTasks[playerid]);
 	}
 	return PlayerDialogTasks[playerid] = task_new();
+}
+
+stock Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[])
+{
+	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
+		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, button1, button2);
+	#else
+		pawn_call_native("ShowPlayerDialog", "dddSSss", playerid, PPD_INFO_DIALOG_ID, style, _:caption, _:info, btnYes, btnNo);
+	#endif
+	return 1;
 }
 
 forward AsyncDialogsHandler(playerid, dialogid, response, listitem, const inputtext[]);
 public AsyncDialogsHandler(playerid, dialogid, response, listitem, const inputtext[])
 {
-	if(dialogid == PAWN_PLUS_DIALOG_ID)
+	if (dialogid == PPD_INFO_DIALOG_ID)
+	{
+		response = 0;
+		listitem = 0;
+		inputtext[0] = EOS;
+		return 1;
+	}
+
+	if(dialogid == PPD_MAIN_DIALOG_ID)
 	{
 		new dialog_response[e_DIALOG_RESPONSE_INFO];
 		dialog_response[E_DIALOG_RESPONSE_Response] = response;
