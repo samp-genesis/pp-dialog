@@ -1,6 +1,5 @@
-# samp-async-dialogs
-
-[![sampctl](https://shields.southcla.ws/badge/sampctl-samp--async--dialogs-2f2f2f.svg?style=for-the-badge)](https://github.com/AGraber/samp-async-dialogs)
+# PawnPlus Dialog
+[![sampctl](https://img.shields.io/badge/sampctl-pp--dialog-2f2f2f.svg?style=for-the-badge)](https://github.com/samp-genesis/pp-dialog)
 
 Async dialog handling with PawnPlus tasks.
 
@@ -9,13 +8,13 @@ Async dialog handling with PawnPlus tasks.
 Simply install to your project:
 
 ```bash
-sampctl package install AGraber/samp-async-dialogs
+sampctl package install samp-genesis/samp-pp-dialog
 ```
 
 Include in your code and begin using the library:
 
 ```pawn
-#include <async-dialogs>
+#include <pp-dialog>
 ```
 
 It is recommended that you set a PawnPlus version explicitely on your pawn.json
@@ -23,10 +22,10 @@ It is recommended that you set a PawnPlus version explicitely on your pawn.json
 
 If you don't use sampctl, just download the `async-dialogs.inc` include and
 drop it to your `includes/` folder, and then download the PawnPlus plugin and
-include [from here](https://github.com/IllidanS4/PawnPlus/releases).
+include [from here](https://github.com/IS4Code/PawnPlus/releases).
 
 While you're on it and if you don't use PawnPlus yet,
-[you should check it out!](https://github.com/IllidanS4/PawnPlus/blob/master/README.md)
+[you should check it out!](https://github.com/IS4Code/PawnPlus/blob/master/README.md)
 
 ## Usage
 
