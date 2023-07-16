@@ -46,7 +46,7 @@
 	#define ShowPlayerDialog DialogPlayerShow
 #endif
 
-enum DIALOG_RESPONSES
+enum e_DIALOG_RESPONSES
 {
 	Response,
 	Listitem,
@@ -131,7 +131,7 @@ public AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:
 
 	if(dialogid == PPD_MAIN_DIALOG_ID)
 	{
-		new dialog_response[DIALOG_RESPONSES];
+		new dialog_response[e_DIALOG_RESPONSES];
 		dialog_response[Response] = response;
 		dialog_response[Listitem] = listitem;
 		strcat(dialog_response[InputText], inputtext, 129);
