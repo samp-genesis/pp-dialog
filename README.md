@@ -47,21 +47,21 @@ CMD:asyncdialog(playerid, params[])
 {
 	task_yield(1);
 
-	new dialog_response[e_DIALOG_RESPONSE_INFO];
-	await_arr(dialog_response) ShowPlayerAsyncDialog(playerid, DIALOG_STYLE_LIST, "Example dialog", "This is listitem 0\nAnd this is one\nShow example nested dialog", "ok", "no");
+	new dialog_response[DIALOG_RESPONSES];
+	await_arr(dialog_response) DialogAsync_ShowPlayer(playerid, DIALOG_STYLE_LIST, "Example dialog", "This is listitem 0\nAnd this is one\nShow example nested dialog", "ok", "no");
 
 	if(dialog_response[E_DIALOG_RESPONSE_Response])
 	{
-		if(dialog_response[E_DIALOG_RESPONSE_Listitem] == 2)
+		if(dialog_response[Listitem] == 2)
 		{
-			new other_dialog_response[e_DIALOG_RESPONSE_INFO];
-			await_arr(other_dialog_response) ShowPlayerAsyncDialog(playerid, DIALOG_STYLE_MSGBOX, "Example nested dialog", "You will recieve a message\nwhichever your response is", "OK", "Yes");
+			new other_dialog_response[DIALOG_RESPONSES];
+			await_arr(other_dialog_response) DialogAsync_ShowPlayer(playerid, DIALOG_STYLE_MSGBOX, "Example nested dialog", "You will recieve a message\nwhichever your response is", "OK", "Yes");
 
 			SendClientMessage(playerid, COLOR_WHITE, "You responded something to the example dialog");
 		}
 		else
 		{
-			SendClientMessageEx(playerid, COLOR_WHITE, "Recieved: listitem = %d | inputtext = %s", dialog_response[E_DIALOG_RESPONSE_Listitem], dialog_response[E_DIALOG_RESPONSE_InputText]);
+			SendClientMessageEx(playerid, COLOR_WHITE, "Recieved: listitem = %d | inputtext = %s", dialog_response[Listitem], dialog_response[InputText]);
 		}
 	}
 	else
@@ -72,6 +72,7 @@ CMD:asyncdialog(playerid, params[])
 ```
 
 ## Thanks
+* @AGraber for the original repo
 * @IllidanS4 for PawnPlus, which allows this and even more awesome stuff
 * @TommyB123 for helping me test it out on a real environment
 
