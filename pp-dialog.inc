@@ -46,11 +46,11 @@
 	#define ShowPlayerDialog DialogPlayerShow
 #endif
 
-enum e_DIALOG_RESPONSE_INFO
+enum DIALOG_RESPONSES
 {
-	DIALOG_RESPONSE,
-	DIALOG_LISTITEM,
-	DIALOG_INPUTTEXT[128 + 1],
+	Response,
+	Listitem,
+	InputText[128 + 1],
 }
 
 static Task:PlayerDialogTasks[MAX_PLAYERS] = {Task:0, ...};
@@ -78,10 +78,10 @@ public _pp@on_exit@PPAsyncDialogs()
 	pawn_unregister_callback(AsyncDialogResponseHandler);
 }
 
-stock Task:DialogAsync_ShowPlayer(playerid, DIALOG_STYLE:style, const caption[], const info[], const btnYes[], const btnNo[])
+stock Task:DialogAsync_ShowPlayer(playerid, DIALOG_STYLE:style, const string:caption[], const string:info[], const string:btnYes[], const string:btnNo[])
 {
 	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
-		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, btnYes, btnNo);
+		ShowPlayerDialog(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, btnYes, btnNo);
 	#else
 		pawn_call_native("ShowPlayerDialog", "dddssss", playerid, PPD_MAIN_DIALOG_ID, style, caption, info, btnYes, btnNo);
 	#endif
@@ -118,8 +118,8 @@ stock Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, str
 	return 1;
 }
 
-forward AsyncDialogsHandler(playerid, dialogid, response, listitem, const inputtext[]);
-public AsyncDialogsHandler(playerid, dialogid, response, listitem, const inputtext[])
+forward AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:inputtext[]);
+public AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:inputtext[])
 {
 	if (dialogid == PPD_INFO_DIALOG_ID)
 	{
