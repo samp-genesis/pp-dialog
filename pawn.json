@@ -1,6 +1,6 @@
 {
-	"user": "AGraber",
-	"repo": "samp-async-dialogs",
+	"user": "samp-genesis",
+	"repo": "pp-dialog",
 	"entry": "test.pwn",
 	"output": "test.amx",
 	"dependencies": [
