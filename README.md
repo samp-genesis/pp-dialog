@@ -1,7 +1,7 @@
 # PawnPlus Dialog
 [![sampctl](https://img.shields.io/badge/sampctl-pp--dialog-2f2f2f.svg?style=for-the-badge)](https://github.com/samp-genesis/pp-dialog)
 
-Async dialog handling with PawnPlus tasks.
+Async dialog handling with PawnPlus tasks taken from AGraber to be exclusively used by Genesis Plus
 
 ## Installation
 
