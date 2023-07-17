@@ -121,14 +121,6 @@ stock Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, str
 forward AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:inputtext[]);
 public AsyncDialogsHandler(playerid, dialogid, response, listitem, const string:inputtext[])
 {
-	if (dialogid == PPD_INFO_DIALOG_ID)
-	{
-		response = 0;
-		listitem = 0;
-		inputtext[0] = EOS;
-		return 1;
-	}
-
 	if(dialogid == PPD_MAIN_DIALOG_ID)
 	{
 		new dialog_response[e_DIALOG_RESPONSES];
