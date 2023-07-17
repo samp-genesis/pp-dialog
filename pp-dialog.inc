@@ -93,7 +93,7 @@ stock Task:DialogAsync_ShowPlayer(playerid, DIALOG_STYLE:style, const string:cap
 	return PlayerDialogTasks[playerid] = task_new();
 }
 
-stock Task:DialogAsync_ShowPlayer_s(playerid, DIALOG_STYLE:style, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[])
+stock Task:DialogAsync_ShowPlayer_s(playerid, DIALOG_STYLE:style, ConstStringTag:caption, ConstStringTag:info, const string:btnYes[], const string:btnNo[])
 {
 	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
 		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, style, caption, info, button1, button2);
@@ -108,7 +108,7 @@ stock Task:DialogAsync_ShowPlayer_s(playerid, DIALOG_STYLE:style, ConstStringTag
 	return PlayerDialogTasks[playerid] = task_new();
 }
 
-stock Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, string:btnYes[], string:btnNo[])
+stock Dialog_ShowInfo(playerid, ConstStringTag:caption, ConstStringTag:info, const string:btnYes[], const string:btnNo[])
 {
 	#if defined PPDIALOGS_NO_COMPAT_NATIVE_CALL
 		ShowPlayerDialogStr(playerid, PPD_MAIN_DIALOG_ID, DIALOG_STYLE_MSGBOX, caption, info, button1, button2);
